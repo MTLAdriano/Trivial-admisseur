@@ -997,7 +997,7 @@ function renderWaiting() {
     if (gameState.players.length < 2) {
       actionsEl.innerHTML = `<div class="text-muted text-sm" style="text-align:center;padding:1rem">En attente d'au moins un autre joueur...</div>`;
     } else {
-      actionsEl.innerHTML = `<button class="btn btn-primary" style="width:100%;margin-top:.5rem" onclick="startGame()">▶ Lancer la partie (${gameState.players.length} joueurs)</button>`;
+      actionsEl.innerHTML = `<button class="btn btn-primary" style="width:100%;margin-top:.5rem" onclick="window.startGame()">▶ Lancer la partie (${gameState.players.length} joueurs)</button>`;
     }
   } else {
     actionsEl.innerHTML = `<div class="text-muted text-sm" style="text-align:center;padding:1rem">⏳ L'hôte va lancer la partie...</div>`;
@@ -1079,7 +1079,7 @@ function renderGame(newQuestion) {
   // Next button (host only after answer)
   const nextWrap = document.getElementById('next-btn-wrap');
   if (myId === gameState.host && alreadyAnswered) {
-    nextWrap.innerHTML = `<button class="btn btn-primary" style="width:100%" onclick="nextTurn()">Joueur suivant →</button>`;
+    nextWrap.innerHTML = `<button class="btn btn-primary" style="width:100%" onclick="window.nextTurn()">Joueur suivant →</button>`;
   } else {
     nextWrap.innerHTML = '';
   }
