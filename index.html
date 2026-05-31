@@ -773,7 +773,7 @@ function renderGame(){
     } else if(answered&&lastResult){
       const r=lastResult;
       fbHTML=r.correct
-        ?`<div class="fb ok show">✅ Bonne réponse !${r.newWedge?' 🎉 Camembert <strong>'+CLABEL[q.cat]+'</strong> !':(r.replay?' 🎲 Rejoue !'':'')}${r.anecdote?'<div class="fanec">'+r.anecdote+'</div>':''}</div>`
+        ?`<div class="fb ok show">✅ Bonne réponse !${r.newWedge?' 🎉 Camembert <strong>'+CLABEL[q.cat]+'</strong> !':r.replay?' 🎲 Rejoue !':''}${r.anecdote?'<div class="fanec">'+r.anecdote+'</div>':''}</div>`
         :`<div class="fb ko show">❌ Mauvaise réponse — <strong>${q.a[q.c]}</strong>${r.anecdote?'<div class="fanec">'+r.anecdote+'</div>':''}</div>`;
     }
     let nextBtn='';
