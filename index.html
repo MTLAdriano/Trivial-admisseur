@@ -478,14 +478,22 @@ function subscribeRoom(code) {
   if (unsubscribe) unsubscribe();
   unsubscribe = db.collection('trivial_games').doc(code).onSnapshot(snap => {
     if (!snap.exists) return;
-    const prev = gameState;
+    const prev = gameState ? JSON.parse(JSON.stringify(gameState)) : null;
     gameState = snap.data();
+    console.log('📡 snapshot:', gameState.phase, gameState.currentQuestion && gameState.currentQuestion.id);
     if (gameState.phase === 'waiting') {
       renderWaiting();
     } else if (gameState.phase === 'playing') {
-      const qChanged = !prev || !prev.currentQuestion || prev.currentQuestion.id !== gameState.currentQuestion.id;
-      if (qChanged) { isAnswering = false; renderGame(true); showScreen('game'); }
-      else renderGame(false);
+      const prevQ = prev && prev.currentQuestion && prev.currentQuestion.id;
+      const newQId = gameState.currentQuestion && gameState.currentQuestion.id;
+      const qChanged = prevQ !== newQId;
+      if (qChanged) {
+        isAnswering = false;
+        renderGame(true);
+      } else {
+        renderGame(false);
+      }
+      showScreen('game');
     } else if (gameState.phase === 'finished') {
       clearTimer();
       renderResults();
