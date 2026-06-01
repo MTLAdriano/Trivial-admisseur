@@ -314,13 +314,24 @@ const TOK_COLORS=['#8B1A2E','#2E86E8','#27AE60','#E8A020','#7C3AED','#E05A2B'];
 // 36 spoke cases (6 per spoke)
 // 1 hub = total 109
 const BOARD=(()=>{
+  // Official TP sequence: colors cycle geo/ent/his/art/sci/spo continuously
+  // HQs at pos 0,12,24,36,48,60 — each HQ anchors its category
+  // Roll-again at pos 6,18,30,42,54,66 (same cat as preceding HQ)
+  // Between HQs the 6 colors complete one full cycle
+  const HQ_CATS=['geo','ent','his','art','sci','spo'];
   const c=[];
   for(let i=0;i<72;i++){
-    const sec=Math.floor(i/12),pos=i%12;
-    c.push({id:i,zone:'ring',cat:CATS[sec],type:pos===0?'hq':pos===6?'roll_again':'normal'});
+    const sec=Math.floor(i/12), pos=i%12;
+    // Color cycles from HQ cat: 0=HQ, 1..5 next 5 colors, 6=roll_again(same as HQ), 7..11 next 5
+    const catIdx=(CATS.indexOf(HQ_CATS[sec])+pos)%6;
+    const type=pos===0?'hq':pos===6?'roll_again':'normal';
+    c.push({id:i,zone:'ring',cat:CATS[catIdx],type});
   }
-  for(let s=0;s<6;s++) for(let j=0;j<6;j++)
-    c.push({id:72+s*6+j,zone:'spoke',cat:CATS[s],type:'normal',spoke:s,sp:j});
+  // Spokes: each spoke connects a HQ to hub, colors cycle from HQ cat outward
+  for(let s=0;s<6;s++) for(let j=0;j<6;j++){
+    const catIdx=(CATS.indexOf(HQ_CATS[s])+j)%6;
+    c.push({id:72+s*6+j,zone:'spoke',cat:CATS[catIdx],type:'normal',spoke:s,sp:j});
+  }
   c.push({id:108,zone:'hub',cat:null,type:'hub'});
   return c;
 })();
